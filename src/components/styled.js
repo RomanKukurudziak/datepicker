@@ -21,7 +21,10 @@ export const OutputStart = styled(Output)`
 `;
 
 export const OutputWrapper = styled.div`
+  min-width: 220px;
+
   display: flex;
+
   justify-content: center;
   margin-bottom: 8px;
 `;
@@ -119,4 +122,12 @@ export const Button = styled.button`
   border: 1px solid #dbdbdb;
   border-radius: 4px;
   cursor: pointer;
+`;
+
+export const RangeButton = styled(Button)`
+  margin: 7px;
+`;
+export const Wrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;

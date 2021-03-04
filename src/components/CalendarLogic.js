@@ -1,7 +1,7 @@
 const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 //Forming array with dates to pass into table
-export function getMonthData(year, month) {
+export const getMonthData = (year, month) => {
   const table = [];
   const date = new Date(year, month);
   const daysInMonth = getDaysInMonth(date);
@@ -19,10 +19,10 @@ export function getMonthData(year, month) {
     }
   }
   return table;
-}
+};
 
 //Date comparison
-export function areEqual(a, b, name) {
+export const areEqual = (a, b, name) => {
   if (!a || !b) return '';
 
   if (
@@ -34,37 +34,34 @@ export function areEqual(a, b, name) {
   } else {
     return '';
   }
-}
+};
 
 //Getting num of days in month including leap year January
-export function getDaysInMonth(date) {
+export const getDaysInMonth = (date) => {
   const month = date.getMonth();
   if (isLeapYear(date.getFullYear()) && month === 1) {
     return DAYS_IN_MONTH[month] + 1;
   } else {
     return DAYS_IN_MONTH[month];
   }
-}
+};
 
 //Day on which month starts
-export function getDayOfWeek(date) {
+export const getDayOfWeek = (date) => {
   const dayOfWeek = date.getDay();
   if (dayOfWeek === 0) return 6;
   return dayOfWeek - 1;
-}
+};
 
 //Вирахування високосного року
-export function isLeapYear(year) {
+export const isLeapYear = (year) => {
   return !(year % 4 || (!(year % 100) && year % 400));
-}
+};
 
-export function inRange(start, end, current, type) {
-  if (current > start && current < end && type === 'range') {
-    return type;
-  } else {
-    return '';
-  }
-}
+//Checks if day is in range and adds class range
+export const inRange = (start, end, current, type) => {
+  if (current > start && current < end && type === 'range') return type;
+};
 
 //Display selected date
 export function renderSelected(date) {
@@ -77,3 +74,10 @@ export function renderSelected(date) {
     return '';
   }
 }
+
+export const outputFormating = (selected) => {
+  const day = selected.getDate().toString().padStart(2, 0);
+  const month = (selected.getMonth() + 1).toString().padStart(2, 0);
+  const year = selected.getFullYear();
+  return `${day}-${month}-${year}`;
+};

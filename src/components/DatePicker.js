@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import * as calendar from './CalendarLogic';
 import {
+  areEqual,
+  inRange,
+  getMonthData,
+  outputFormating,
+} from './CalendarLogic';
+import {
+  Wrapper,
   Output,
   OutputStart,
   OutputWrapper,
@@ -17,40 +23,35 @@ import {
 
 const DatePicker = ({ dates, type }) => {
   const { months, days, years } = dates;
-  let monthSelect = '';
-  let yearSelect = '';
 
-  let [date, setDate] = useState(new Date());
-  let [monthData, setMonthDate] = useState([]);
+  const [date, setDate] = useState(new Date());
+  const [monthData, setMonthDate] = useState([]);
+  const [pickedDate, setPickedDate] = useState({
+    year: date.getFullYear(),
+    month: date.getMonth(),
+  });
 
-  let [selectedDate, setSelectedDate] = useState(new Date());
-  let [selectedRangeDate, setSelectedRangeDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedRangeDate, setSelectedRangeDate] = useState(new Date());
+  const [selectedDate2, setSelectedDate2] = useState(new Date());
+  const [selectedRangeDate2, setSelectedRangeDate2] = useState(new Date());
+  const [selectedDate3, setSelectedDate3] = useState(new Date());
+  const [selectedRangeDate3, setSelectedRangeDate3] = useState(new Date());
+  const [currentRange, setCurrentRange] = useState([
+    selectedDate,
+    selectedRangeDate,
+  ]);
 
-  //Rerender date table each time date changes
-  useEffect(() => {
-    setMonthDate(calendar.getMonthData(date.getFullYear(), date.getMonth()));
-  }, [date]);
-  console.log(monthData);
-  //If type is not range - disable initial range start
-  useEffect(() => {
-    if (type !== 'range') {
-      setSelectedRangeDate('');
-    }
-  }, [type]);
-
-  const handlePrevMonthButton = () => {
-    let prevDate = new Date(date.getFullYear(), date.getMonth() - 1);
-    setDate(prevDate);
-  };
+  const handlePrevMonthButton = () =>
+    setDate(new Date(date.getFullYear(), date.getMonth() - 1));
 
   const handleNextMonthButton = () => {
     let prevDate = new Date(date.getFullYear(), date.getMonth() + 1);
     setDate(prevDate);
   };
 
-  const handleSelectChange = () => {
-    let dateSelect = new Date(yearSelect.value, monthSelect.value);
-    setDate(dateSelect);
+  const handleSelectChange = (field) => (event) => {
+    setPickedDate({ ...pickedDate, [field]: event.target.value });
   };
 
   const handleDayClick = (day) => {
@@ -61,119 +62,113 @@ const DatePicker = ({ dates, type }) => {
     }
   };
 
+  useEffect(() => {
+    setMonthDate(getMonthData(date.getFullYear(), date.getMonth()));
+  }, [date]);
+
+  useEffect(() => {
+    if (type === 'single') {
+      setSelectedRangeDate('');
+    } else {
+      setSelectedRangeDate(selectedDate);
+    }
+  }, [type]);
+
+  useEffect(() => {
+    setDate(new Date(pickedDate.year, pickedDate.month));
+  }, [pickedDate]);
+
   return (
-    <Calendar>
-      <Header>
-        <OutputWrapper>
-          <OutputStart
-            typeProp={type}
-            value={
-              selectedRangeDate
-                ? `${selectedRangeDate.getDate().toString().padStart(2, 0)}-${(
-                    selectedRangeDate.getMonth() + 1
-                  )
-                    .toString()
-                    .padStart(2, 0)}-${selectedRangeDate.getFullYear()}`
-                : ''
-            }
-            onChange={Function.prototype}
-          />
-          <Output
-            value={`${selectedDate.getDate().toString().padStart(2, 0)}-${(
-              selectedDate.getMonth() + 1
-            )
-              .toString()
-              .padStart(2, 0)}-${selectedDate.getFullYear()}`}
-            onChange={Function.prototype}
-          />
-        </OutputWrapper>
-        <Hr />
+    <Wrapper>
+      <Calendar>
+        <Header>
+          <OutputWrapper>
+            <OutputStart
+              typeProp={type}
+              value={
+                selectedRangeDate ? outputFormating(selectedRangeDate) : ''
+              }
+              onChange={() => {}}
+            />
+            <Output
+              value={selectedDate ? outputFormating(selectedDate) : ''}
+              onChange={() => {}}
+            />
+          </OutputWrapper>
+          <Hr />
 
-        <OutputWrapper>
-          <Button onClick={() => handlePrevMonthButton()}>{'<'}</Button>
+          <OutputWrapper>
+            <Button onClick={() => handlePrevMonthButton()}>{'<'}</Button>
 
-          <Select
-            value={date.getMonth()}
-            onChange={() => handleSelectChange()}
-            ref={(el) => (monthSelect = el)}
-          >
-            {months.map((month, index) => {
-              return (
+            <Select
+              value={date.getMonth()}
+              onChange={handleSelectChange('month')}
+            >
+              {months.map((month, index) => (
                 <option key={month} value={index}>
                   {month}
                 </option>
-              );
-            })}
-          </Select>
+              ))}
+            </Select>
 
-          <Select
-            value={date.getFullYear()}
-            onChange={() => handleSelectChange()}
-            ref={(el) => (yearSelect = el)}
-          >
-            {years.map((year, index) => {
-              return (
+            <Select
+              value={date.getFullYear()}
+              onChange={handleSelectChange('year')}
+            >
+              {years.map((year, index) => (
                 <option key={index} value={year}>
                   {year}
                 </option>
+              ))}
+            </Select>
+
+            <Button onClick={() => handleNextMonthButton()}>{'>'}</Button>
+          </OutputWrapper>
+          <Hr />
+        </Header>
+
+        <Table>
+          <thead>
+            <Weekdays>
+              {days.map((day) => (
+                <th key={day}>{day}</th>
+              ))}
+            </Weekdays>
+          </thead>
+
+          <tbody {...dates}>
+            {monthData.map((week, index) => {
+              return (
+                <tr key={index}>
+                  {week.map((date, index) =>
+                    date ? (
+                      <Day
+                        key={index}
+                        onClick={() => handleDayClick(date)}
+                        className={`${inRange(
+                          selectedRangeDate,
+                          selectedDate,
+                          date,
+                          type
+                        )} ${areEqual(date, new Date(), 'today')} ${areEqual(
+                          date,
+                          selectedDate,
+                          'selected'
+                        )} ${areEqual(date, selectedRangeDate, 'selectedEnd')}`}
+                      >
+                        {date.getDate()}
+                      </Day>
+                    ) : (
+                      <td key={index}></td>
+                    )
+                  )}
+                </tr>
               );
             })}
-          </Select>
-
-          <Button onClick={() => handleNextMonthButton()}>{'>'}</Button>
-        </OutputWrapper>
-        <Hr />
-      </Header>
-
-      <Table>
-        <thead>
-          <Weekdays>
-            {days.map((day) => {
-              return <th key={day}>{day}</th>;
-            })}
-          </Weekdays>
-        </thead>
-
-        <tbody>
-          {monthData.map((week, index) => {
-            return (
-              <tr key={index}>
-                {week.map((date, index) => {
-                  return date ? (
-                    <Day
-                      key={index}
-                      onClick={() => handleDayClick(date)}
-                      className={`${calendar.inRange(
-                        selectedRangeDate,
-                        selectedDate,
-                        date,
-                        type
-                      )} ${calendar.areEqual(
-                        date,
-                        new Date(),
-                        'today'
-                      )} ${calendar.areEqual(
-                        date,
-                        selectedDate,
-                        'selected'
-                      )} ${calendar.areEqual(
-                        date,
-                        selectedRangeDate,
-                        'selectedEnd'
-                      )}`}
-                    >
-                      {date.getDate()}
-                    </Day>
-                  ) : (
-                    <td key={index}></td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
-    </Calendar>
+          </tbody>
+        </Table>
+      </Calendar>
+    </Wrapper>
   );
 };
 

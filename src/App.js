@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import DatePicker from './components/DatePicker.js';
+import { RangeButton, OutputWrapper } from './components/styled';
 
 const dates = {
   months: [
@@ -20,12 +21,17 @@ const dates = {
   years: [2020, 2021, 2022, 2023, 2024, 2025],
 };
 
-const type = 'range'; //If range - range is enabled, else single date pick. Multirange not implemented
-
 const App = () => {
+  const [type, setType] = useState('range');
+
   return (
     <div>
       <DatePicker dates={dates} type={type} />
+      <OutputWrapper>
+        <RangeButton onClick={() => setType('range')}>Range</RangeButton>
+        <RangeButton onClick={() => setType('single')}>Single</RangeButton>
+        <RangeButton>Multi Range</RangeButton>
+      </OutputWrapper>
     </div>
   );
 };
