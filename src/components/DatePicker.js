@@ -173,8 +173,12 @@ const DatePicker = ({ dates, type }) => {
 };
 
 DatePicker.propTypes = {
-  dates: PropTypes.object.isRequired,
-  type: PropTypes.string,
+  dates: PropTypes.shape({
+    days: PropTypes.arrayOf(PropTypes.string),
+    months: PropTypes.arrayOf(PropTypes.string),
+    years: PropTypes.arrayOf(PropTypes.string),
+  }).isRequired,
+  type: PropTypes.string.isRequired,
 };
 
 DatePicker.defaultProps = {
