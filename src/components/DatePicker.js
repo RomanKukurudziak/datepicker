@@ -5,7 +5,7 @@ import {
   inRange,
   getMonthData,
   outputFormating,
-} from './CalendarLogic';
+} from '../services/clendar.js';
 import {
   Wrapper,
   Output,

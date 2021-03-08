@@ -6,7 +6,6 @@ export const Output = styled.input`
   width: 7em;
   font-size: 14px;
   background-color: transparent;
-  color: white;
   border: 1px solid lightgrey;
   border-radius: 4px;
   display: inline-flex;
@@ -41,16 +40,12 @@ export const Select = styled.select`
   width: 7.4em;
   font-size: 14px;
   background-color: transparent;
-  color: white;
-  border: 1px solid white;
+  border: 1px solid lightgrey;
   border-radius: 4px;
   display: inline-flex;
   justify-content: center;
   align-items: center;
   text-align: right;
-  & option {
-    background-color: #bdd4e7;
-  }
 `;
 
 export const Table = styled.table`
@@ -102,9 +97,6 @@ export const Calendar = styled.div`
   border: 1px solid lightgrey;
   border-radius: 5px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-  background-color: #485461;
-  background-image: linear-gradient(315deg, #485461 0%, #28313b 74%);
-  color: white;
 `;
 
 export const Weekdays = styled.tr`
@@ -124,7 +116,6 @@ export const Button = styled.button`
   height: 2em;
   font-size: 1rem;
   background-color: transparent;
-  color: white;
   border: 1px solid #dbdbdb;
   border-radius: 4px;
   cursor: pointer;
@@ -132,7 +123,6 @@ export const Button = styled.button`
 
 export const RangeButton = styled(Button)`
   margin: 7px;
-  background-color: #485461;
 `;
 export const Wrapper = styled.div`
   display: flex;
