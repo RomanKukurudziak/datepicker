@@ -60,7 +60,8 @@ export const isLeapYear = (year) => {
 
 //Checks if day is in range and adds class range
 export const inRange = (start, end, current, type) => {
-  if (current > start && current < end && type === 'range') return type;
+  if (current > start && current < end && type === 'range')
+    return { range: 'true' };
 };
 
 //Display selected date

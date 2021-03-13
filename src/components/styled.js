@@ -61,6 +61,7 @@ export const Day = styled.td`
   text-align: center;
   border: 2px solid transparent;
   border-radius: 50%;
+  background-color: ${(props) => (props.range ? 'lightblue' : 'transparent')};
 
   &:hover {
     background-color: #eaeaea;

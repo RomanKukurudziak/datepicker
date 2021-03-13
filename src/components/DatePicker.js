@@ -42,6 +42,8 @@ const DatePicker = ({ dates, type }) => {
     selectedRangeDate,
   ]);
 
+  const pro = { active: '' };
+
   const handlePrevMonthButton = () =>
     setDate(new Date(date.getFullYear(), date.getMonth() - 1));
 
@@ -144,13 +146,18 @@ const DatePicker = ({ dates, type }) => {
                     date ? (
                       <Day
                         key={index}
-                        onClick={() => handleDayClick(date)}
-                        className={`${inRange(
+                        {...inRange(
                           selectedRangeDate,
                           selectedDate,
                           date,
                           type
-                        )} ${areEqual(date, new Date(), 'today')} ${areEqual(
+                        )}
+                        onClick={() => handleDayClick(date)}
+                        className={`${areEqual(
+                          date,
+                          new Date(),
+                          'today'
+                        )} ${areEqual(
                           date,
                           selectedDate,
                           'selected'
@@ -176,7 +183,7 @@ DatePicker.propTypes = {
   dates: PropTypes.shape({
     days: PropTypes.arrayOf(PropTypes.string),
     months: PropTypes.arrayOf(PropTypes.string),
-    years: PropTypes.arrayOf(PropTypes.string),
+    years: PropTypes.arrayOf(PropTypes.number),
   }).isRequired,
   type: PropTypes.string.isRequired,
 };
