@@ -115,7 +115,6 @@ const DatePicker = ({ dates, type }) => {
           </OutputWrapper>
           <Hr />
         </Header>
-
         <Table>
           <thead>
             <Weekdays>
