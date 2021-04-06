@@ -28,14 +28,6 @@ const DatePicker = ({ dates, type }) => {
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedRangeDate, setSelectedRangeDate] = useState(new Date());
-  const [selectedDate2, setSelectedDate2] = useState(new Date());
-  const [selectedRangeDate2, setSelectedRangeDate2] = useState(new Date());
-  const [selectedDate3, setSelectedDate3] = useState(new Date());
-  const [selectedRangeDate3, setSelectedRangeDate3] = useState(new Date());
-  const [currentRange, setCurrentRange] = useState([
-    selectedDate,
-    selectedRangeDate,
-  ]);
 
   const pro = { active: '' };
 
