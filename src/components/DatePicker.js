@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import {
-  areEqual,
-  inRange,
-  getMonthData,
-  outputFormating,
-} from '../services/clendar.js';
+import { areEqual, inRange, getMonthData, outputFormating } from './helpers.js';
 import {
   Wrapper,
   Output,
